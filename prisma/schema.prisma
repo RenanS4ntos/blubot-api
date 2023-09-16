@@ -14,17 +14,30 @@ model Team {
   id          String      @id @default(uuid())
   description String
   Attendant   Attendant[]
+  Service     Service[]
 }
 
 model Attendant {
-  id     String @id @default(uuid())
-  name   String
-  team   Team   @relation(fields: [teamId], references: [id])
-  teamId String
+  id      String    @id @default(uuid())
+  name    String
+  team    Team      @relation(fields: [teamId], references: [id])
+  teamId  String
+  Service Service[]
 }
 
 model Forwardings {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   description String
-  createdAt   DateTime @default(now())
+  createdAt   DateTime  @default(now())
+  Service     Service[]
+}
+
+model Service {
+  id           String      @id @default(uuid())
+  team         Team        @relation(fields: [teamId], references: [id])
+  teamId       String
+  forwarding   Forwardings @relation(fields: [forwardingId], references: [id])
+  forwardingId String
+  attendant    Attendant?  @relation(fields: [attendantId], references: [id])
+  attendantId  String?
 }
